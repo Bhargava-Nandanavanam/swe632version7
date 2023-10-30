@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import {
   Button,Container,Box,TextField,Typography,List, ListItem,Avatar,Divider,Paper, Menu,MenuItem,
 } from "@mui/material";
-import { Send, ThumbUp, ThumbDown } from "@mui/icons-material";
+import { Send, ThumbUp, ThumbDown, Undo } from "@mui/icons-material";
 import jsonData from "./data.json";
 import UserChangedNotification from "./Components/UserChangedNotification";
 import { Post, User } from "./Components/MessageContext";
@@ -260,6 +260,17 @@ function App() {
                       >
                         Cancel
                       </Button>
+<<<<<<< Updated upstream
+=======
+                      <Button
+                        variant="text"
+                        color="secondary"
+                        startIcon={<Undo />}
+                        onClick={() => handleDelete(post.id)}
+                      >
+                        Undo
+                      </Button>
+>>>>>>> Stashed changes
                     </>
                   ) : (
                     <Button
