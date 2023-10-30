@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import {
   Button,Container,Box,TextField,Typography,List, ListItem,Avatar,Divider,Paper, Menu,MenuItem,
 } from "@mui/material";
-import { Send, ThumbUp, ThumbDown, Undo } from "@mui/icons-material";
+import { Send, ThumbUp, ThumbDown, Undo, Save, Cancel, Edit } from "@mui/icons-material";
 import jsonData from "./data.json";
 import UserChangedNotification from "./Components/UserChangedNotification";
 import { Post, User } from "./Components/MessageContext";
@@ -16,8 +16,7 @@ function App() {
   const [newPost, setNewPost] = useState("");
   const [currentID, setCurrentID] = useState(0);
   const [currentUser, setCurrentUser] = useState<User>(jsonData.users[0]);
-  const [upvotes, setUpvotes] = useState(new Array(posts.length).fill(0));
-  const [downvotes, setDownvotes] = useState(new Array(posts.length).fill(0));
+  const [postVotes, setPostVotes] = useState<{ [postId: number]: { upvotes: number; downvotes: number } }>({});
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const messageContainerRef = useRef<HTMLDivElement | null>(null);
@@ -52,6 +51,11 @@ function App() {
     setEditPostId(null);
     setEditedPost("");
   };
+
+  const handleDelete = (postId: number) => {
+    const updatedPosts = posts.filter((post) => post.id !== postId);
+    setPosts(updatedPosts);
+  };
   const addPost = () => {
     if (newPost.trim() !== "" && currentUser) {
       const newPostObj = {
@@ -65,11 +69,12 @@ function App() {
       setCurrentID(currentID + 1);
       setPosts((prevPosts) => [newPostObj, ...prevPosts]);
       setNewPost("");
-      setUpvotes((prevUpvotes) => [...prevUpvotes, 0]);
-      setDownvotes((prevDownvotes) => [...prevDownvotes, 0]);
+      setPostVotes((prevVotes) => ({
+        ...prevVotes,
+        [currentID]: { upvotes: 0, downvotes: 0 },
+      }));
     }
   };
-
   const scrollToBottom = () => {
     if (messageContainerRef.current) {
       messageContainerRef.current.scrollTop =
@@ -100,18 +105,25 @@ function App() {
     closeUserMenu();
   };
 
-  const handleUpvote = (postId: number) => {
-    const newUpvotes = [...upvotes];
-    newUpvotes[postId - 1]++;
-    setUpvotes(newUpvotes);
-  };
+const handleUpvote = (postId: number) => {
+  setPostVotes((prevVotes) => ({
+    ...prevVotes,
+    [postId]: {
+      upvotes: (prevVotes[postId]?.upvotes || 0) + 1,
+      downvotes: prevVotes[postId]?.downvotes || 0,
+    },
+  }));
+};
 
-  const handleDownvote = (postId: number) => {
-    const newDownvotes = [...downvotes];
-    newDownvotes[postId - 1]++;
-    setDownvotes(newDownvotes);
-  };
-
+const handleDownvote = (postId: number) => {
+  setPostVotes((prevVotes) => ({
+    ...prevVotes,
+    [postId]: {
+      upvotes: prevVotes[postId]?.upvotes || 0,
+      downvotes: (prevVotes[postId]?.downvotes || 0) + 1,
+    },
+  }));
+};
   const filteredPosts = selectedUser
     ? posts.filter((post) => post.user.id === selectedUser.id)
     : posts;
@@ -223,24 +235,24 @@ function App() {
                 </Typography>
               </Box>
               <Box ml="Auto">
-                <Button
+              <Button
                   variant="text"
                   color="primary"
                   startIcon={<ThumbUp />}
                   onClick={() => handleUpvote(post.id)}
                 >
-                  ({upvotes[index]})
-                </Button>
+                  ({postVotes[post.id]?.upvotes || 0})
+              </Button>
               </Box>
               <Box ml={2}>
-                <Button
-                  variant="text"
-                  color="secondary"
-                  startIcon={<ThumbDown />}
-                  onClick={() => handleDownvote(post.id)}
-                >
-                  ({downvotes[index]})
-                </Button>
+              <Button
+                    variant="text"
+                    color="secondary"
+                    startIcon={<ThumbDown />}
+                    onClick={() => handleDownvote(post.id)}
+                  >
+                    ({postVotes[post.id]?.downvotes || 0})
+              </Button>
               </Box>
               {currentUser.id === post.user.id && (
                 <Box ml={2}>
@@ -249,6 +261,7 @@ function App() {
                       <Button
                         variant="text"
                         color="primary"
+                        startIcon={<Save />}
                         onClick={handleSaveEdit}
                       >
                         Save
@@ -256,12 +269,11 @@ function App() {
                       <Button
                         variant="text"
                         color="secondary"
+                        startIcon={<Cancel />}
                         onClick={handleCancelEdit}
                       >
                         Cancel
                       </Button>
-<<<<<<< Updated upstream
-=======
                       <Button
                         variant="text"
                         color="secondary"
@@ -270,12 +282,12 @@ function App() {
                       >
                         Undo
                       </Button>
->>>>>>> Stashed changes
                     </>
                   ) : (
                     <Button
                       variant="text"
                       color="primary"
+                      startIcon={<Edit />}
                       onClick={() => handleEdit(post.id, post.content)}
                     >
                       Edit
