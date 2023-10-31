@@ -26,11 +26,11 @@ function App() {
   const [isEditing, setIsEditing] = useState(false);
   const [editedPost, setEditedPost] = useState("");
   const [editPostId, setEditPostId] = useState<number | null>(null);
-    const handleEdit = (postId:number, content : string) => {
+  const handleEdit = (postId: number, content: string) => {
     setIsEditing(true);
     setEditPostId(postId);
     setEditedPost(content);
-  };
+  };  
 
   const handleSaveEdit = () => {
     if (editedPost.trim() !== "") {
@@ -45,7 +45,6 @@ function App() {
     setEditPostId(null);
     setEditedPost("");
   };
-
   const handleCancelEdit = () => {
     setIsEditing(false);
     setEditPostId(null);
@@ -59,7 +58,7 @@ function App() {
   const addPost = () => {
     if (newPost.trim() !== "" && currentUser) {
       const newPostObj = {
-        id: currentID,
+        id: posts.length + 1,
         user: currentUser,
         content: newPost,
         votes: { upvotes: 0, downvotes: 0 },
