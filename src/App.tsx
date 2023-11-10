@@ -1,14 +1,34 @@
 import React, { useState, useEffect, useRef } from "react";
 import {
-  Button,Container,Box,TextField,Typography,List, ListItem,Avatar,Divider,Paper, Menu,MenuItem,
+  Button,
+  Container,
+  Box,
+  TextField,
+  Typography,
+  List,
+  ListItem,
+  Avatar,
+  Divider,
+  Paper,
+  Menu,
+  MenuItem,
+  AppBar,
+  Toolbar,
 } from "@mui/material";
-import { Send, ThumbUp, ThumbDown, Undo, Save, Cancel, Edit } from "@mui/icons-material";
+import {
+  Send,
+  ThumbUp,
+  ThumbDown,
+  Undo,
+  Save,
+  Cancel,
+  Edit,
+} from "@mui/icons-material";
 import jsonData from "./data.json";
 import UserChangedNotification from "./Components/UserChangedNotification";
 import { Post, User } from "./Components/MessageContext";
-import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
-import Help from "./Components/Help";
-import Documentation from "./Components/Documentation";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import llamaLogo from "./llama-logo.png";
 
 function App() {
   const [users, setUsers] = useState<User[]>(jsonData.users);
@@ -16,7 +36,9 @@ function App() {
   const [newPost, setNewPost] = useState("");
   const [currentID, setCurrentID] = useState(0);
   const [currentUser, setCurrentUser] = useState<User>(jsonData.users[0]);
-  const [postVotes, setPostVotes] = useState<{ [postId: number]: { upvotes: number; downvotes: number } }>({});
+  const [postVotes, setPostVotes] = useState<{
+    [postId: number]: { upvotes: number; downvotes: number };
+  }>({});
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const messageContainerRef = useRef<HTMLDivElement | null>(null);
@@ -30,13 +52,17 @@ function App() {
     setIsEditing(true);
     setEditPostId(postId);
     setEditedPost(content);
-  };  
+  };
 
   const handleSaveEdit = () => {
     if (editedPost.trim() !== "") {
       const updatedPosts = posts.map((post) =>
         post.id === editPostId
-          ? { ...post, content: editedPost, timestamp: new Date().toISOString() }
+          ? {
+              ...post,
+              content: editedPost,
+              timestamp: new Date().toISOString(),
+            }
           : post
       );
       setPosts(updatedPosts);
@@ -104,200 +130,195 @@ function App() {
     closeUserMenu();
   };
 
-const handleUpvote = (postId: number) => {
-  setPostVotes((prevVotes) => ({
-    ...prevVotes,
-    [postId]: {
-      upvotes: (prevVotes[postId]?.upvotes || 0) + 1,
-      downvotes: prevVotes[postId]?.downvotes || 0,
-    },
-  }));
-};
+  const handleUpvote = (postId: number) => {
+    setPostVotes((prevVotes) => ({
+      ...prevVotes,
+      [postId]: {
+        upvotes: (prevVotes[postId]?.upvotes || 0) + 1,
+        downvotes: prevVotes[postId]?.downvotes || 0,
+      },
+    }));
+  };
 
-const handleDownvote = (postId: number) => {
-  setPostVotes((prevVotes) => ({
-    ...prevVotes,
-    [postId]: {
-      upvotes: prevVotes[postId]?.upvotes || 0,
-      downvotes: (prevVotes[postId]?.downvotes || 0) + 1,
-    },
-  }));
-};
+  const handleDownvote = (postId: number) => {
+    setPostVotes((prevVotes) => ({
+      ...prevVotes,
+      [postId]: {
+        upvotes: prevVotes[postId]?.upvotes || 0,
+        downvotes: (prevVotes[postId]?.downvotes || 0) + 1,
+      },
+    }));
+  };
   const filteredPosts = selectedUser
     ? posts.filter((post) => post.user.id === selectedUser.id)
     : posts;
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-      if (e.key === "Enter") {
-        addPost();
-      }
-  };
-  
-  const openDocumentation = () => {
-    setIsDocumentationOpen(true);
-    setIsHelpOpen(false);
-    scrollDownToContent();
-  };
-
-  const closeDocumentation = () => {
-    setIsDocumentationOpen(false);
-  };
-
-  const openHelp = () => {
-    setIsHelpOpen(true);
-    setIsDocumentationOpen(false);
-    scrollDownToContent();
-  };
-
-  const closeHelp = () => {
-    setIsHelpOpen(false);
-  };
-
-  const scrollDownToContent = () => {
-    const content = document.getElementById("content");
-    if (content) {
-      content.scrollIntoView(true);
+    if (e.key === "Enter") {
+      addPost();
     }
   };
 
-  const [isDocumentationOpen, setIsDocumentationOpen] = useState(false);
-  const [isHelpOpen, setIsHelpOpen] = useState(false);
-  const documentationRef = useRef<HTMLDivElement | null>(null);
-  const helpRef = useRef<HTMLDivElement | null>(null);
-
   return (
     <Container
-    maxWidth="sm"
-    style={{ minHeight: "100vh", padding: "16px", display: "flex", flexDirection: "column", alignItems: "center" }}
-  >
-      <Typography variant="h1" align="center">
-        DA LLAMA
-      </Typography>
-      <Divider />
-      <Box mt={2}>
-        <Box display="flex" alignItems="center" justifyContent="space-between">
-          <Button
-            onClick={openUserMenu}
-            variant="outlined"
-            color="primary"
-            aria-controls="user-menu"
-            aria-haspopup="true"
+      maxWidth={false}
+      style={{
+        minHeight: "100vh",
+        padding: "16px",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      <AppBar position="static">
+        <Toolbar>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              width: "100%",
+            }}
           >
-            Switch User ({currentUser.name})
-          </Button>
-          <UserChangedNotification
-            open={isNotificationOpen}
-            onClose={() => setIsNotificationOpen(false)}
-            userName={currentUser}
-          />
-          <Menu
-            id="user-menu"
-            anchorEl={userMenuAnchor}
-            open={Boolean(userMenuAnchor)}
-            onClose={closeUserMenu}
-          >
-            {users.map((user) => (
-              <MenuItem
-                key={user.id}
-                onClick={() => handleUserSelection(user)}
+            <Box sx={{ display: "flex", alignItems: "left" }}>
+              <img
+                src={llamaLogo}
+                alt="Llama Logo"
+                style={{ height: 40, marginRight: 10 }}
+              />
+            </Box>
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <Typography variant="h4">DA LLAMA</Typography>
+            </Box>
+
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <Button
+                onClick={openUserMenu}
+                variant="text"
+                color="inherit"
+                startIcon={<AccountCircleIcon />}
+                aria-controls="user-menu"
+                aria-haspopup="true"
+                style={{ border: "1px solid white", borderRadius: "5px" }}
               >
-                {user.name}
-              </MenuItem>
-            ))}
-          </Menu>
-        </Box>
-       
+                Switch User ({currentUser.name})
+              </Button>
+              <UserChangedNotification
+                open={isNotificationOpen}
+                onClose={() => setIsNotificationOpen(false)}
+                userName={currentUser}
+              />
+              <Menu
+                id="user-menu"
+                anchorEl={userMenuAnchor}
+                open={Boolean(userMenuAnchor)}
+                onClose={closeUserMenu}
+              >
+                {users.map((user) => (
+                  <MenuItem
+                    key={user.id}
+                    onClick={() => handleUserSelection(user)}
+                  >
+                    {user.name}
+                  </MenuItem>
+                ))}
+              </Menu>
+            </Box>
+          </Box>
+        </Toolbar>
+        <Divider />
+      </AppBar>
+      <Box mt={2} style={{ width: "80%" }}>
         <Paper elevation={3}>
           <div
-            style={{ maxHeight: "400px", overflowY: "auto" }}
+            style={{ maxHeight: "400px", overflowY: "auto", width: "100%" }}
             ref={messageContainerRef}
           >
-        <List>
-          {filteredPosts.map((post, index) => (
-            <ListItem key={index}>
-              <Avatar>{post.user.name[0]}</Avatar>
-              <Box ml={2}>
-                <Typography variant="subtitle1" fontWeight="bold">
-                  {post.user.name}
-                </Typography>
-                {isEditing && editPostId === post.id ? (
-                  <TextField
-                    fullWidth
-                    value={editedPost}
-                    onChange={(e) => setEditedPost(e.target.value)}
-                  />
-                ) : (
-                  <Typography variant="body1">{post.content}</Typography>
-                )}
-                <Typography variant="caption" color="textSecondary">
-                  {new Date(post.timestamp).toLocaleString()}
-                </Typography>
-              </Box>
-              <Box ml="Auto">
-              <Button
-                  variant="text"
-                  color="primary"
-                  startIcon={<ThumbUp />}
-                  onClick={() => handleUpvote(post.id)}
-                >
-                  ({postVotes[post.id]?.upvotes || 0})
-              </Button>
-              </Box>
-              <Box ml={2}>
-              <Button
-                    variant="text"
-                    color="secondary"
-                    startIcon={<ThumbDown />}
-                    onClick={() => handleDownvote(post.id)}
-                  >
-                    ({postVotes[post.id]?.downvotes || 0})
-              </Button>
-              </Box>
-              {currentUser.id === post.user.id && (
-                <Box ml={2}>
-                  {isEditing && editPostId === post.id ? (
-                    <>
-                      <Button
-                        variant="text"
-                        color="primary"
-                        startIcon={<Save />}
-                        onClick={handleSaveEdit}
-                      >
-                        Save
-                      </Button>
-                      <Button
-                        variant="text"
-                        color="secondary"
-                        startIcon={<Cancel />}
-                        onClick={handleCancelEdit}
-                      >
-                        Cancel
-                      </Button>
-                      <Button
-                        variant="text"
-                        color="secondary"
-                        startIcon={<Undo />}
-                        onClick={() => handleDelete(post.id)}
-                      >
-                        Undo
-                      </Button>
-                    </>
-                  ) : (
+            <List>
+              {filteredPosts.map((post, index) => (
+                <ListItem key={index}>
+                  <Avatar>{post.user.name[0]}</Avatar>
+                  <Box ml={2}>
+                    <Typography variant="subtitle1" fontWeight="bold">
+                      {post.user.name}
+                    </Typography>
+                    {isEditing && editPostId === post.id ? (
+                      <TextField
+                        fullWidth
+                        value={editedPost}
+                        onChange={(e) => setEditedPost(e.target.value)}
+                      />
+                    ) : (
+                      <Typography variant="body1">{post.content}</Typography>
+                    )}
+                    <Typography variant="caption" color="textSecondary">
+                      {new Date(post.timestamp).toLocaleString()}
+                    </Typography>
+                  </Box>
+                  <Box ml="Auto">
                     <Button
                       variant="text"
                       color="primary"
-                      startIcon={<Edit />}
-                      onClick={() => handleEdit(post.id, post.content)}
+                      startIcon={<ThumbUp />}
+                      onClick={() => handleUpvote(post.id)}
                     >
-                      Edit
+                      ({postVotes[post.id]?.upvotes || 0})
                     </Button>
+                  </Box>
+                  <Box ml={2}>
+                    <Button
+                      variant="text"
+                      color="secondary"
+                      startIcon={<ThumbDown />}
+                      onClick={() => handleDownvote(post.id)}
+                    >
+                      ({postVotes[post.id]?.downvotes || 0})
+                    </Button>
+                  </Box>
+                  {currentUser.id === post.user.id && (
+                    <Box ml={2}>
+                      {isEditing && editPostId === post.id ? (
+                        <>
+                          <Button
+                            variant="text"
+                            color="primary"
+                            startIcon={<Save />}
+                            onClick={handleSaveEdit}
+                          >
+                            Save
+                          </Button>
+                          <Button
+                            variant="text"
+                            color="secondary"
+                            startIcon={<Cancel />}
+                            onClick={handleCancelEdit}
+                          >
+                            Cancel
+                          </Button>
+                          <Button
+                            variant="text"
+                            color="secondary"
+                            startIcon={<Undo />}
+                            onClick={() => handleDelete(post.id)}
+                          >
+                            Undo
+                          </Button>
+                        </>
+                      ) : (
+                        <Button
+                          variant="text"
+                          color="primary"
+                          startIcon={<Edit />}
+                          onClick={() => handleEdit(post.id, post.content)}
+                        >
+                          Edit
+                        </Button>
+                      )}
+                    </Box>
                   )}
-                </Box>
-              )}
-            </ListItem>
-          ))}
-        </List>
-
+                </ListItem>
+              ))}
+            </List>
           </div>
         </Paper>
       </Box>
@@ -322,78 +343,30 @@ const handleDownvote = (postId: number) => {
           </Button>
         </Box>
         <Box mt={2} display="flex" alignItems="center">
-  <Typography variant="h4">Filter:</Typography>
-  <Button
-    onClick={() => setSelectedUser(null)}
-    variant="outlined"
-    color="primary"
-    size="small"
-    style={{ marginLeft: '10px', marginRight: '10px' }} // Add margin to this button
-  >
-    All Users
-  </Button>
-  {users.map((user, index) => (
-    <Button
-      key={user.id}
-      onClick={() => setSelectedUser(user)}
-      variant="outlined"
-      color="primary"
-      size="small"
-      style={{ marginRight: '8px' }} // Add margin to all user buttons
-    >
-      {user.name}
-    </Button>
-  ))}
+          <Typography variant="h4">Filter:</Typography>
+          <Button
+            onClick={() => setSelectedUser(null)}
+            variant="outlined"
+            color="primary"
+            size="small"
+            style={{ marginLeft: "10px", marginRight: "10px" }} // Add margin to this button
+          >
+            All Users
+          </Button>
+          {users.map((user, index) => (
+            <Button
+              key={user.id}
+              onClick={() => setSelectedUser(user)}
+              variant="outlined"
+              color="primary"
+              size="small"
+              style={{ marginRight: "8px" }} // Add margin to all user buttons
+            >
+              {user.name}
+            </Button>
+          ))}
+        </Box>
       </Box>
-      </Box>
-
-      <Box mt={2}>
-        {/* Button to toggle the Documentation component */}
-        <Button
-          variant="outlined"
-          style={{
-            backgroundColor: isDocumentationOpen ? "blue" : "white",
-            color: isDocumentationOpen ? "white" : "black"
-          }}
-          onClick={() => {
-            if (isDocumentationOpen) {
-              closeDocumentation();
-            } else {
-              openDocumentation();
-              closeHelp(); // Close the Help component when Documentation is opened
-            }
-          }}
-        >
-        Documentation
-        </Button>
-        {/* Button to toggle the Help component */}
-        <Button
-          variant="outlined"
-          style={{
-            backgroundColor: isHelpOpen ? "blue" : "white",
-            color: isHelpOpen ? "white" : "black"
-          }}
-          onClick={() => {
-            if (isHelpOpen) {
-              closeHelp();
-            } else {
-              openHelp();
-              closeDocumentation(); // Close the Documentation component when Help is opened
-            }
-          }}
-        >
-          Help
-        </Button>
-      </Box>
-
-      <div id="content">
-        {isDocumentationOpen && <Documentation />}
-        {isHelpOpen && <Help />}
-      </div>
-      <Routes>
-        <Route path="/help" Component={Help} />
-        <Route path="/documentation" Component={Documentation} />
-      </Routes>
     </Container>
   );
 }
