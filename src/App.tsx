@@ -26,6 +26,10 @@ import {
 } from "@mui/icons-material";
 import jsonData from "./data.json";
 import UserChangedNotification from "./Components/UserChangedNotification";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
 import { Post, User } from "./Components/MessageContext";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import llamaLogo from "./llama-logo.png";
@@ -48,6 +52,9 @@ function App() {
   const [isEditing, setIsEditing] = useState(false);
   const [editedPost, setEditedPost] = useState("");
   const [editPostId, setEditPostId] = useState<number | null>(null);
+  const [isSaveConfirmationOpen, setIsSaveConfirmationOpen] = useState(false);
+  const [isUndoConfirmationOpen, setIsUndoConfirmationOpen] = useState(false);
+
   const handleEdit = (postId: number, content: string) => {
     setIsEditing(true);
     setEditPostId(postId);
@@ -81,6 +88,24 @@ function App() {
     const updatedPosts = posts.filter((post) => post.id !== postId);
     setPosts(updatedPosts);
   };
+
+  const openSaveConfirmation = () => {
+    setIsSaveConfirmationOpen(true);
+  };
+  
+  const closeSaveConfirmation = () => {
+    setIsSaveConfirmationOpen(false);
+  };
+  
+  const openUndoConfirmation = () => {
+    setIsUndoConfirmationOpen(true);
+  };
+  
+  const closeUndoConfirmation = () => {
+    setIsUndoConfirmationOpen(false);
+  };
+  
+  
   const addPost = () => {
     if (newPost.trim() !== "" && currentUser) {
       const newPostObj = {
@@ -283,8 +308,8 @@ function App() {
                             variant="text"
                             color="primary"
                             startIcon={<Save />}
-                            onClick={handleSaveEdit}
-                          >
+                            onClick={() => openSaveConfirmation()}
+                            >
                             Save
                           </Button>
                           <Button
@@ -299,8 +324,8 @@ function App() {
                             variant="text"
                             color="secondary"
                             startIcon={<Undo />}
-                            onClick={() => handleDelete(post.id)}
-                          >
+                            onClick={() => openUndoConfirmation()}
+                            >
                             Undo
                           </Button>
                         </>
@@ -309,11 +334,57 @@ function App() {
                           variant="text"
                           color="primary"
                           startIcon={<Edit />}
-                          onClick={() => handleEdit(post.id, post.content)}
-                        >
+                          onClick={() => handleEdit(post.id, post.content)}                          >
                           Edit
                         </Button>
+                        
                       )}
+                      <Dialog
+                      open={isSaveConfirmationOpen}
+                      onClose={closeSaveConfirmation}
+                      maxWidth="xs"
+                      fullWidth
+                    >
+                      <DialogTitle>Confirm Save</DialogTitle>
+                      <DialogContent>
+                        Are you sure you want to save the changes to this message?
+                      </DialogContent>
+                      <DialogActions>
+                        <Button onClick={closeSaveConfirmation} color="primary">
+                          Cancel
+                        </Button>
+                        <Button 
+                          onClick={() => {
+                          handleSaveEdit();
+                          closeSaveConfirmation(); 
+                        }} 
+                        color="primary">
+                          Confirm
+                        </Button>
+                      </DialogActions>
+                    </Dialog>
+
+
+                      <Dialog
+                        open={isUndoConfirmationOpen}
+                        onClose={closeUndoConfirmation}
+                        maxWidth="xs"
+                        fullWidth
+                      >
+                        <DialogTitle>Confirm Undo</DialogTitle>
+                        <DialogContent>
+                          Are you sure you want to undo this message?
+                        </DialogContent>
+                        <DialogActions>
+                          <Button onClick={closeUndoConfirmation} color="primary">
+                            Cancel
+                          </Button>
+                          <Button onClick={() => handleDelete(post.id)} color="primary">
+                            Confirm
+                          </Button>
+                        </DialogActions>
+                      </Dialog>
+
                     </Box>
                   )}
                 </ListItem>
