@@ -31,6 +31,9 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import { Post, User } from "./Components/MessageContext";
+import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
+import Help from "./Components/Help";
+import Documentation from "./Components/Documentation";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import llamaLogo from "./llama-logo.png";
 
@@ -54,6 +57,8 @@ function App() {
   const [editPostId, setEditPostId] = useState<number | null>(null);
   const [isSaveConfirmationOpen, setIsSaveConfirmationOpen] = useState(false);
   const [isUndoConfirmationOpen, setIsUndoConfirmationOpen] = useState(false);
+  const [isDocumentationOpen, setIsDocumentationOpen] = useState(false);
+  const [isHelpOpen, setIsHelpOpen] = useState(false);
 
   const handleEdit = (postId: number, content: string) => {
     setIsEditing(true);
@@ -181,6 +186,32 @@ function App() {
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") {
       addPost();
+    }
+  };
+  const openDocumentation = () => {
+    setIsDocumentationOpen(true);
+    setIsHelpOpen(false);
+    scrollDownToContent();
+  };
+
+  const closeDocumentation = () => {
+    setIsDocumentationOpen(false);
+  };
+
+  const openHelp = () => {
+    setIsHelpOpen(true);
+    setIsDocumentationOpen(false);
+    scrollDownToContent();
+  };
+
+  const closeHelp = () => {
+    setIsHelpOpen(false);
+  };
+
+  const scrollDownToContent = () => {
+    const content = document.getElementById("content");
+    if (content) {
+      content.scrollIntoView(true);
     }
   };
 
@@ -438,6 +469,53 @@ function App() {
           ))}
         </Box>
       </Box>
+      <Box mt={2}>
+        {/* Button to toggle the Documentation component */}
+        <Button
+          variant="outlined"
+          style={{
+            backgroundColor: isDocumentationOpen ? "blue" : "white",
+            color: isDocumentationOpen ? "white" : "black"
+          }}
+          onClick={() => {
+            if (isDocumentationOpen) {
+              closeDocumentation();
+            } else {
+              openDocumentation();
+              closeHelp(); // Close the Help component when Documentation is opened
+            }
+          }}
+        >
+        Documentation
+        </Button>
+        {/* Button to toggle the Help component */}
+        <Button
+          variant="outlined"
+          style={{
+            backgroundColor: isHelpOpen ? "blue" : "white",
+            color: isHelpOpen ? "white" : "black"
+          }}
+          onClick={() => {
+            if (isHelpOpen) {
+              closeHelp();
+            } else {
+              openHelp();
+              closeDocumentation(); // Close the Documentation component when Help is opened
+            }
+          }}
+        >
+          Help
+        </Button>
+      </Box>
+
+      <div id="content">
+        {isDocumentationOpen && <Documentation />}
+        {isHelpOpen && <Help />}
+      </div>
+      <Routes>
+        <Route path="/help" Component={Help} />
+        <Route path="/documentation" Component={Documentation} />
+      </Routes>
     </Container>
   );
 }
