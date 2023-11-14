@@ -501,30 +501,43 @@ function App() {
             Post
           </Button>
         </Box>
-        <Box mt={2} display="flex" alignItems="center">
-          <Typography variant="h4">Filter:</Typography>
+      <Divider/>
+        <AppBar position="static">
+      < Toolbar>
+      <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              width: "100%",
+            }}
+          >         
+          <Typography variant="h4" >Filter:</Typography>
           <Button
             onClick={() => setSelectedUser(null)}
-            variant="outlined"
-            color="primary"
+            variant="text"
+            color="inherit"
             size="small"
-            style={{ marginLeft: "10px", marginRight: "10px" }} // Add margin to this button
-          >
+            style={{ border: "1px solid white", borderRadius: "5px",marginRight: "10px",marginLeft: "10px"}}
+            >
             All Users
           </Button>
           {users.map((user, index) => (
             <Button
               key={user.id}
               onClick={() => setSelectedUser(user)}
-              variant="outlined"
-              color="primary"
+              variant="text"
+              color="inherit"
               size="small"
-              style={{ marginRight: "8px" }} // Add margin to all user buttons
-            >
+              style={{ border: "1px solid white", borderRadius: "5px", marginRight: "8px" }}
+              >
               {user.name}
             </Button>
           ))}
         </Box>
+        </Toolbar>
+      <Divider />
+    </AppBar>
       </Box>
 
 
