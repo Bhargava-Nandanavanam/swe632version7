@@ -292,6 +292,52 @@ function App() {
         </Toolbar>
         <Divider />
       </AppBar>
+      <Box
+      sx={{
+        position: "fixed",
+        bottom: "20px",
+        right: "20px",
+        zIndex: 1000, // Adjust the z-index as needed
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "flex-end",
+      }}
+    >
+      <Button
+        variant="outlined"
+        color="primary"
+        onClick={() => {
+          if (isDocumentationOpen) {
+            closeDocumentation();
+          } else {
+            openDocumentation();
+            closeHelp();
+          }
+        }}
+      >
+        Documentation
+      </Button>
+      <Button
+        variant="outlined"
+        color="primary"
+        onClick={() => {
+          if (isHelpOpen) {
+            closeHelp();
+          } else {
+            openHelp();
+            closeDocumentation();
+          }
+        }}
+        style={{ marginTop: "10px" }}
+      >
+        Help
+      </Button>
+    </Box>
+
+    {/* Main content */}
+    <Box mt={2} style={{ width: "80%" }}>
+      {/* ... (existing content code) ... */}
+    </Box>
       <Box mt={2} style={{ width: "80%" }}>
         <Paper elevation={3}>
           <div
@@ -477,44 +523,7 @@ function App() {
           ))}
         </Box>
       </Box>
-      <Box mt={2}>
-        {/* Button to toggle the Documentation component */}
-        <Button
-          variant="outlined"
-          style={{
-            backgroundColor: isDocumentationOpen ? "blue" : "white",
-            color: isDocumentationOpen ? "white" : "black"
-          }}
-          onClick={() => {
-            if (isDocumentationOpen) {
-              closeDocumentation();
-            } else {
-              openDocumentation();
-              closeHelp(); // Close the Help component when Documentation is opened
-            }
-          }}
-        >
-        Documentation
-        </Button>
-        {/* Button to toggle the Help component */}
-        <Button
-          variant="outlined"
-          style={{
-            backgroundColor: isHelpOpen ? "blue" : "white",
-            color: isHelpOpen ? "white" : "black"
-          }}
-          onClick={() => {
-            if (isHelpOpen) {
-              closeHelp();
-            } else {
-              openHelp();
-              closeDocumentation(); // Close the Documentation component when Help is opened
-            }
-          }}
-        >
-          Help
-        </Button>
-      </Box>
+
 
       <div id="content">
         {isDocumentationOpen && <Documentation />}
