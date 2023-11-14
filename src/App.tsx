@@ -247,18 +247,26 @@ function App() {
               <Typography variant="h4">DA LLAMA</Typography>
             </Box>
 
+
             <Box sx={{ display: "flex", alignItems: "center" }}>
               <Button
                 onClick={openUserMenu}
                 variant="text"
                 color="inherit"
-                startIcon={<AccountCircleIcon />}
                 aria-controls="user-menu"
                 aria-haspopup="true"
                 style={{ border: "1px solid white", borderRadius: "5px" }}
               >
-                Switch User ({currentUser.name})
+                Switch User 
               </Button>
+              <Button
+              variant="text"
+              color="inherit"
+              startIcon={<AccountCircleIcon/>}
+              style={{ textTransform: "none", fontSize: "1.2rem", marginLeft: "10px", pointerEvents: "none" }}
+            >
+              {currentUser.name}
+            </Button>
               <UserChangedNotification
                 open={isNotificationOpen}
                 onClose={() => setIsNotificationOpen(false)}
