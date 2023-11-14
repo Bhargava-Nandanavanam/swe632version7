@@ -152,13 +152,16 @@ function App() {
   const handleUserSelection = (selectedUser: User) => {
     setCurrentUser(selectedUser);
     setIsNotificationOpen(true);
-
+  
     setTimeout(() => {
       setIsNotificationOpen(false);
     }, 5000);
-
+  
     closeUserMenu();
+    closeUndoConfirmation();
+    closeSaveConfirmation(); 
   };
+  
 
   const handleUpvote = (postId: number) => {
     setPostVotes((prevVotes) => ({
