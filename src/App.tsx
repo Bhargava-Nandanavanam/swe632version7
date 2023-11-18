@@ -568,7 +568,7 @@ function App() {
                   id="Documenation and help"
                   sx={{
                     position: "fixed",
-                    bottom: "600px", // Adjust the distance from the bottom
+                    bottom: "250px", // Adjust the distance from the bottom
                     left: "50%",
                     zIndex: 1000,
                     transform: "translateX(-50%)", // Adjusted transform value
