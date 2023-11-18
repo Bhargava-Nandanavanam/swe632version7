@@ -568,14 +568,14 @@ function App() {
                   id="Documenation and help"
                   sx={{
                     position: "fixed",
-                    bottom: "250px", // Adjust the distance from the bottom
+                    bottom: isDocumentationOpen || isHelpOpen ? "80px" : "30px",
                     left: "50%",
                     zIndex: 1000,
                     transform: "translateX(-50%)", // Adjusted transform value
                     display: "flex",
                     flexDirection: "column", // Updated to column direction
                     alignItems: "center", // Center align items
-                    justifyContent: "center", // Center align items horizontally
+                    justifyContent: "center",
                   }}
                 >
                   <Box style={{ display: "flex" }}>
