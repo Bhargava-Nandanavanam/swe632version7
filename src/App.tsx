@@ -24,6 +24,10 @@ import {
   Cancel,
   Edit,
 } from "@mui/icons-material";
+import HelpIcon from '@mui/icons-material/Help';
+import ArticleIcon from '@mui/icons-material/Article';
+import PeopleIcon from '@mui/icons-material/People';
+import PersonIcon from '@mui/icons-material/Person';
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import jsonData from "./data.json";
 import UserChangedNotification from "./Components/UserChangedNotification";
@@ -341,9 +345,8 @@ function App() {
                      padding: "10px 20px", // Adjusted padding for better appearance
                      borderRadius: "5px", // Add border radius to the title
                      display: "inline-block", // Center the text within the background
-                     width: "80%",
-                   }}
-                 >
+                     width: "80%", 
+                   }}>
                 Filter by user:
               </Typography>
               <ListItem>
@@ -361,6 +364,8 @@ function App() {
                       border: "1px solid #007bff", // Change border color on hover
                     },
                   }}
+                  startIcon={<PeopleIcon />}
+
                 >
                   All Users
                 </Button>
@@ -381,6 +386,8 @@ function App() {
                         border: "1px solid #007bff", // Change border color on hover
                       },
                     }}
+                    startIcon={<PersonIcon />}
+
                   >
                     {user.name}
                   </Button>
@@ -596,6 +603,8 @@ function App() {
                           closeHelp();
                         }
                       }}
+                      startIcon={<ArticleIcon />}
+
                     >
                       Documentation
                     </Button>
@@ -610,6 +619,7 @@ function App() {
                           closeDocumentation();
                         }
                       }}
+                      startIcon={<HelpIcon />}
                       style={{ marginLeft: "10px" }} // Adjust the spacing between buttons
                     >
                       Help
