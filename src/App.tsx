@@ -99,20 +99,21 @@ function App() {
   const handleDelete = (postId: number) => {
     const updatedPosts = posts.filter((post) => post.id !== postId);
     setPosts(updatedPosts);
+    setIsUndoConfirmationOpen(false); // Close the undo confirmation popup
   };
 
   const openSaveConfirmation = () => {
     setIsSaveConfirmationOpen(true);
   };
-
+  
   const closeSaveConfirmation = () => {
     setIsSaveConfirmationOpen(false);
   };
-
+  
   const openUndoConfirmation = () => {
     setIsUndoConfirmationOpen(true);
   };
-
+  
   const closeUndoConfirmation = () => {
     setIsUndoConfirmationOpen(false);
   };
@@ -158,15 +159,16 @@ function App() {
   const handleUserSelection = (selectedUser: User) => {
     setCurrentUser(selectedUser);
     setIsNotificationOpen(true);
-
+  
     setTimeout(() => {
       setIsNotificationOpen(false);
     }, 5000);
-
+  
     closeUserMenu();
     closeUndoConfirmation();
-    closeSaveConfirmation();
+    closeSaveConfirmation(); 
   };
+  
 
   const handleUpvote = (postId: number) => {
     setPostVotes((prevVotes) => ({
@@ -408,149 +410,136 @@ function App() {
                   ref={messageContainerRef}
                 >
                   <List>
-                    {filteredPosts.map((post, index) => (
-                      <ListItem key={index}>
-                        <Avatar>{post.user.name[0]}</Avatar>
-                        <Box ml={2}>
-                          <Typography variant="subtitle1" fontWeight="bold">
-                            {post.user.name}
-                          </Typography>
-                          {isEditing && editPostId === post.id ? (
-                            <TextField
-                              fullWidth
-                              value={editedPost}
-                              onChange={(e) => setEditedPost(e.target.value)}
-                            />
-                          ) : (
-                            <Typography variant="body1">
-                              {post.content}
-                            </Typography>
-                          )}
-                          <Typography variant="caption" color="textSecondary">
-                            {new Date(post.timestamp).toLocaleString()}
-                          </Typography>
-                        </Box>
-                        <Box ml="Auto">
+              {filteredPosts.map((post, index) => (
+                <ListItem key={index}>
+                  <Avatar>{post.user.name[0]}</Avatar>
+                  <Box ml={2}>
+                    <Typography variant="subtitle1" fontWeight="bold">
+                      {post.user.name}
+                    </Typography>
+                    {isEditing && editPostId === post.id ? (
+                      <TextField
+                        fullWidth
+                        value={editedPost}
+                        onChange={(e) => setEditedPost(e.target.value)}
+                      />
+                    ) : (
+                      <Typography variant="body1">{post.content}</Typography>
+                    )}
+                    <Typography variant="caption" color="textSecondary">
+                      {new Date(post.timestamp).toLocaleString()}
+                    </Typography>
+                  </Box>
+                  <Box ml="Auto">
+                    <Button
+                      variant="text"
+                      color="primary"
+                      startIcon={<ThumbUp />}
+                      onClick={() => handleUpvote(post.id)}
+                    >
+                      ({postVotes[post.id]?.upvotes || 0})
+                    </Button>
+                  </Box>
+                  <Box ml={2}>
+                    <Button
+                      variant="text"
+                      color="secondary"
+                      startIcon={<ThumbDown />}
+                      onClick={() => handleDownvote(post.id)}
+                    >
+                      ({postVotes[post.id]?.downvotes || 0})
+                    </Button>
+                  </Box>
+                  {currentUser.id === post.user.id && (
+                    <Box ml={2}>
+                      {isEditing && editPostId === post.id ? (
+                        <>
                           <Button
                             variant="text"
                             color="primary"
-                            startIcon={<ThumbUp />}
-                            onClick={() => handleUpvote(post.id)}
-                          >
-                            ({postVotes[post.id]?.upvotes || 0})
+                            startIcon={<Save />}
+                            onClick={() => openSaveConfirmation()}
+                            >
+                            Save
                           </Button>
-                        </Box>
-                        <Box ml={2}>
                           <Button
                             variant="text"
                             color="secondary"
-                            startIcon={<ThumbDown />}
-                            onClick={() => handleDownvote(post.id)}
+                            startIcon={<Cancel />}
+                            onClick={handleCancelEdit}
                           >
-                            ({postVotes[post.id]?.downvotes || 0})
+                            Cancel
                           </Button>
-                        </Box>
-                        {currentUser.id === post.user.id && (
-                          <Box ml={2}>
-                            {isEditing && editPostId === post.id ? (
-                              <>
-                                <Button
-                                  variant="text"
-                                  color="primary"
-                                  startIcon={<Save />}
-                                  onClick={() => openSaveConfirmation()}
-                                >
-                                  Save
-                                </Button>
-                                <Button
-                                  variant="text"
-                                  color="secondary"
-                                  startIcon={<Cancel />}
-                                  onClick={handleCancelEdit}
-                                >
-                                  Cancel
-                                </Button>
-                                <Button
-                                  variant="text"
-                                  color="secondary"
-                                  startIcon={<Undo />}
-                                  onClick={() => openUndoConfirmation()}
-                                >
-                                  Undo
-                                </Button>
-                              </>
-                            ) : (
-                              <Button
-                                variant="text"
-                                color="primary"
-                                startIcon={<Edit />}
-                                onClick={() =>
-                                  handleEdit(post.id, post.content)
-                                }
-                              >
-                                Edit
-                              </Button>
-                            )}
-                            <Dialog
-                              open={isSaveConfirmationOpen}
-                              onClose={closeSaveConfirmation}
-                              maxWidth="xs"
-                              fullWidth
+                          <Button
+                            variant="text"
+                            color="secondary"
+                            startIcon={<Undo />}
+                            onClick={() => openUndoConfirmation()}
                             >
-                              <DialogTitle>Confirm Save</DialogTitle>
-                              <DialogContent>
-                                Are you sure you want to save the changes to
-                                this message?
-                              </DialogContent>
-                              <DialogActions>
-                                <Button
-                                  onClick={closeSaveConfirmation}
-                                  color="primary"
-                                >
-                                  Cancel
-                                </Button>
-                                <Button
-                                  onClick={() => {
-                                    handleSaveEdit();
-                                    closeSaveConfirmation();
-                                  }}
-                                  color="primary"
-                                >
-                                  Confirm
-                                </Button>
-                              </DialogActions>
-                            </Dialog>
+                            Undo
+                          </Button>
+                        </>
+                      ) : (
+                        <Button
+                          variant="text"
+                          color="primary"
+                          startIcon={<Edit />}
+                          onClick={() => handleEdit(post.id, post.content)}                          >
+                          Edit
+                        </Button>
+                        
+                      )}
+                      <Dialog
+                      open={isSaveConfirmationOpen}
+                      onClose={closeSaveConfirmation}
+                      maxWidth="xs"
+                      fullWidth
+                    >
+                      <DialogTitle>Confirm Save</DialogTitle>
+                      <DialogContent>
+                        Are you sure you want to save the changes to this message?
+                      </DialogContent>
+                      <DialogActions>
+                        <Button onClick={closeSaveConfirmation} color="primary">
+                          Cancel
+                        </Button>
+                        <Button 
+                          onClick={() => {
+                          handleSaveEdit();
+                          closeSaveConfirmation(); 
+                        }} 
+                        color="primary">
+                          Confirm
+                        </Button>
+                      </DialogActions>
+                    </Dialog>
 
-                            <Dialog
-                              open={isUndoConfirmationOpen}
-                              onClose={closeUndoConfirmation}
-                              maxWidth="xs"
-                              fullWidth
-                            >
-                              <DialogTitle>Confirm Undo</DialogTitle>
-                              <DialogContent>
-                                Are you sure you want to undo this message?
-                              </DialogContent>
-                              <DialogActions>
-                                <Button
-                                  onClick={closeUndoConfirmation}
-                                  color="primary"
-                                >
-                                  Cancel
-                                </Button>
-                                <Button
-                                  onClick={() => handleDelete(post.id)}
-                                  color="primary"
-                                >
-                                  Confirm
-                                </Button>
-                              </DialogActions>
-                            </Dialog>
-                          </Box>
-                        )}
-                      </ListItem>
-                    ))}
-                  </List>
+
+                      <Dialog
+                        open={isUndoConfirmationOpen}
+                        onClose={closeUndoConfirmation}
+                        maxWidth="xs"
+                        fullWidth
+                      >
+                        <DialogTitle>Confirm Undo</DialogTitle>
+                        <DialogContent>
+                          Are you sure you want to undo this message?
+                        </DialogContent>
+                        <DialogActions>
+                          <Button onClick={closeUndoConfirmation} color="primary">
+                            Cancel
+                          </Button>
+                          <Button onClick={() => handleDelete(post.id)} color="primary">
+                            Confirm
+                          </Button>
+                        </DialogActions>
+                      </Dialog>
+
+                    </Box>
+                  )}
+                </ListItem>
+              ))}
+            </List>
                 </div>
                 
               </Paper>
