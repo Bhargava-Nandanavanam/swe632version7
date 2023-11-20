@@ -4,28 +4,28 @@
       "id": 1,
       "name": "Amin",
       "nickname": "N/A",
-      "location": "Alexandria",
+      "location": "Alexandria, VA",
       "gender": "Male"      
     },
     {
       "id": 2,
       "name": "Ben",
       "nickname": "N/A",
-      "location": "Arlington",
+      "location": "Arlington, VA",
       "gender": "Male" 
     },
     {
       "id": 3,
       "name": "Jessie",
       "nickname": "N/A",
-      "location": "Falls Church",
+      "location": "Falls Church, VA",
       "gender": "Male" 
     },
     {
       "id": 4,
       "name": "Bunny",
       "nickname": "N/A",
-      "location": "Fairfax",
+      "location": "Fairfax, VA",
       "gender": "Male" 
     }
   ],
@@ -36,7 +36,7 @@
         "id": 1,
         "name": "Amin",
         "nickname": "N/A",
-        "location": "Alexandria",
+        "location": "Alexandria, VA",
         "gender": "Male"
       },
       "content": "Just explored a new hiking trail today—breathtaking views!",
@@ -52,7 +52,7 @@
         "id": 4,
         "name": "Bunny",
         "nickname": "N/A",
-        "location": "Fairfax",
+        "location": "Fairfax, VA",
         "gender": "Male" 
       },
       "content": "Working on a coding project, feeling motivated!",
@@ -68,7 +68,7 @@
         "id": 2,
         "name": "Ben",
         "nickname": "N/A",
-        "location": "Arlington",
+        "location": "Arlington, VA",
         "gender": "Male" 
       },
       "content": "Just finished a great book. Any recommendations for the next read?",
@@ -84,7 +84,7 @@
         "id": 3,
         "name": "Jessie",
         "nickname": "N/A",
-        "location": "Falls Church",
+        "location": "Falls Church, VA",
         "gender": "Male" 
       },
       "content": "Celebrating a successful week at work!",
