@@ -60,6 +60,8 @@ function App() {
   const [isUndoConfirmationOpen, setIsUndoConfirmationOpen] = useState(false);
   const [isDocumentationOpen, setIsDocumentationOpen] = useState(false);
   const [isHelpOpen, setIsHelpOpen] = useState(false);
+  const currentLoggedInUser: User | undefined = users.find((user) => user.id === currentUser.id);
+
 
   const handleEdit = (postId: number, content: string) => {
     setIsEditing(true);
@@ -318,6 +320,7 @@ function App() {
               width: "20%",
               overflowY: "auto",
               marginRight: "16px",
+              marginLeft: "16px",
               marginTop: "16px",
               border: "1px solid #2196F3",
             }}
@@ -330,17 +333,17 @@ function App() {
                 flexShrink: 0, // Prevent the filter list from shrinking
               }}
             >
-              <Typography
-                variant="h4"
-                sx={{
-                  backgroundColor: theme.palette.primary.main, // Blue background color
-                  color: "white", // White text color
-                  padding: "10px 20px", // Adjusted padding for better appearance
-                  borderRadius: "5px", // Add border radius to the title
-                  display: "inline-block", // Center the text within the background
-                  width: "80%",
-                }}
-              >
+                 <Typography
+                   variant="h4"
+                   sx={{
+                     backgroundColor: theme.palette.primary.main, // Blue background color
+                     color: "white", // White text color
+                     padding: "10px 20px", // Adjusted padding for better appearance
+                     borderRadius: "5px", // Add border radius to the title
+                     display: "inline-block", // Center the text within the background
+                     width: "80%",
+                   }}
+                 >
                 Filter by user:
               </Typography>
               <ListItem>
@@ -352,8 +355,8 @@ function App() {
                   sx={{
                     border: "1px solid white",
                     borderRadius: "5px",
-                    marginRight: "10px",
-                    marginLeft: "10px",
+                    marginRight: "20px",
+                    marginLeft: "20px",
                     "&:hover": {
                       border: "1px solid #007bff", // Change border color on hover
                     },
@@ -372,8 +375,8 @@ function App() {
                     sx={{
                       border: "1px solid white",
                       borderRadius: "5px",
-                      marginRight: "10px",
-                      marginLeft: "10px",
+                      marginRight: "20px",
+                      marginLeft: "20px",
                       "&:hover": {
                         border: "1px solid #007bff", // Change border color on hover
                       },
@@ -385,6 +388,7 @@ function App() {
               ))}
             </List>
           </div>
+         
           <div id="Chat Section" style={{ flex: 1 }}>
             <Box mt={2}>
               <Paper elevation={3}>
@@ -541,7 +545,9 @@ function App() {
                     ))}
                   </List>
                 </div>
+                
               </Paper>
+
             </Box>
             <Box mt={2}>
               <Box display="flex" alignItems="center">
@@ -619,6 +625,65 @@ function App() {
                 </Box>
               </Box>
             </Box>
+          </div>
+          <div
+            id="User Info Section"
+            style={{
+              height: "20%",
+              width: "20%",
+              overflowY: "auto",
+              marginRight: "16px",
+              marginLeft: "16px",
+              marginTop: "16px",
+              border: "1px solid #2196F3",
+            }}
+          >
+                 <Typography
+                   variant="h4"
+                   sx={{
+                     backgroundColor: theme.palette.primary.main, // Blue background color
+                     color: "white", // White text color
+                     padding: "10px 20px", // Adjusted padding for better appearance
+                     borderRadius: "5px", // Add border radius to the title
+                     display: "inline-block", // Center the text within the background
+                     width: "80%",
+                   }}
+                 >
+                User Info:</Typography>
+                <List
+              component="nav"
+              aria-label="main mailbox folders"
+              style={{
+                marginRight: "16px",
+                flexShrink: 0, // Prevent the filter list from shrinking
+              }}
+            >
+                <ListItem>
+                  <Typography variant="body1" fontWeight="bold" style={{marginLeft: "10px"}}>
+                    Name:
+                  </Typography>
+                  <Typography variant="body1"style={{marginLeft: "10px"}}>{currentLoggedInUser?.name}</Typography>
+                </ListItem>
+                <ListItem>
+                  <Typography variant="body1" fontWeight="bold" style={{marginLeft: "10px"}}>
+                    Nickname:
+                  </Typography>
+                  <Typography variant="body1" style={{marginLeft: "10px"}}>{currentLoggedInUser?.nickname}</Typography>
+                </ListItem>
+                <ListItem>
+                  <Typography variant="body1" fontWeight="bold" style={{marginLeft: "10px"}}>
+                    Location:
+                  </Typography>
+                  <Typography variant="body1" style={{marginLeft: "10px"}}>{currentLoggedInUser?.location}</Typography>
+                </ListItem>
+                <ListItem>
+                  <Typography variant="body1" fontWeight="bold" style={{marginLeft: "10px"}}>
+                    Gender:
+                  </Typography>
+                  <Typography variant="body1" style={{marginLeft: "10px"}}>{currentLoggedInUser?.gender}</Typography>
+                </ListItem>
+              </List>
+
           </div>
         </div>
       </ThemeProvider>

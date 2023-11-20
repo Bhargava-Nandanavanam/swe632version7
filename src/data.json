@@ -2,19 +2,31 @@
   "users": [
     {
       "id": 1,
-      "name": "Amin"
+      "name": "Amin",
+      "nickname": "N/A",
+      "location": "Alexandria",
+      "gender": "Male"      
     },
     {
       "id": 2,
-      "name": "Ben"
+      "name": "Ben",
+      "nickname": "N/A",
+      "location": "Arlington",
+      "gender": "Male" 
     },
     {
       "id": 3,
-      "name": "Jessie"
+      "name": "Jessie",
+      "nickname": "N/A",
+      "location": "Falls Church",
+      "gender": "Male" 
     },
     {
       "id": 4,
-      "name": "Bunny"
+      "name": "Bunny",
+      "nickname": "N/A",
+      "location": "Fairfax",
+      "gender": "Male" 
     }
   ],
   "posts": [
@@ -22,7 +34,10 @@
       "id": 1,
       "user": {
         "id": 1,
-        "name": "Amin"
+        "name": "Amin",
+        "nickname": "N/A",
+        "location": "Alexandria",
+        "gender": "Male"
       },
       "content": "Just explored a new hiking trail today—breathtaking views!",
       "votes": {
@@ -35,7 +50,10 @@
       "id": 2,
       "user": {
         "id": 4,
-        "name": "Bunny"
+        "name": "Bunny",
+        "nickname": "N/A",
+        "location": "Fairfax",
+        "gender": "Male" 
       },
       "content": "Working on a coding project, feeling motivated!",
       "votes": {
@@ -48,7 +66,10 @@
       "id": 3,
       "user": {
         "id": 2,
-        "name": "Ben"
+        "name": "Ben",
+        "nickname": "N/A",
+        "location": "Arlington",
+        "gender": "Male" 
       },
       "content": "Just finished a great book. Any recommendations for the next read?",
       "votes": {
@@ -61,7 +82,10 @@
       "id": 4,
       "user": {
         "id": 3,
-        "name": "Jessie"
+        "name": "Jessie",
+        "nickname": "N/A",
+        "location": "Falls Church",
+        "gender": "Male" 
       },
       "content": "Celebrating a successful week at work!",
       "votes": {

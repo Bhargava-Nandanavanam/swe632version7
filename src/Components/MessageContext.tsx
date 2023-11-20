@@ -1,7 +1,10 @@
 export interface User {
-    id: number;
-    name: string;
-  }
+  id: number;
+  name: string;
+  nickname: string;
+  location: string;
+  gender: string;
+}
   
 
   export interface Post {
